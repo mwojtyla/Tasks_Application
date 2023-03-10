@@ -18,9 +18,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+
 @RestController
 @RequestMapping("/v1/tasks")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class TaskController {
 
     private final DbService service;
