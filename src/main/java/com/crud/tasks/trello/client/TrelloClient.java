@@ -41,18 +41,18 @@ public class TrelloClient {
     @org.springframework.beans.factory.annotation.Value("${trello.app.username}")
     private String username;*/
 
-   /* private URI urlBuild(){
+  /*  private URI urlBuild(){
         URI url = UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/martynawojtyla/boards")
                 .queryParam("key", trelloAppKey)
                 .queryParam("token", trelloToken)
-                .queryParam("username", username)
+                //.queryParam("username", username)
                 .queryParam("fields", "name,id")
                 .queryParam("lists","all")
                 .build().encode().toUri();
 
         return url;
-    }*/
-
+    }
+*/
     /*public List<TrelloBoardDto> getTrelloBoards() {
         TrelloBoardDto[] boardsResponse = restTemplate.getForObject(urlBuild(), TrelloBoardDto[].class);
 
