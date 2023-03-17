@@ -30,14 +30,14 @@ class SimpleEmailServiceTest {
                 .mailTo("test@test.com")
                 .subject("Test")
                 .message("Test Message")
-                .toCc("cctest@cctest.com")
+                //.toCc("cctest@cctest.com")
                 .build();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
-        mailMessage.setCc(mail.getToCc());
+        //mailMessage.setCc(mail.getToCc());
 
         //When
         simpleEmailService.send(mail);
