@@ -21,11 +21,17 @@ public class EmailScheduler {
     //@Scheduled(fixedDelay = 1000)
     public void sendInformationEmail() {
         long size = taskRepository.count();
+
+        String taskWord = " task";
+        if (size>1){
+            taskWord = " tasks";
+        }
+
         simpleEmailService.send(
                 new Mail(
                         adminConfig.getAdminMail(),
                         SUBJECT,
-                        "Currently in database you got: " + size + " tasks",
+                        "Currently in database you got: " + size + taskWord,
                         null
                 )
         );
