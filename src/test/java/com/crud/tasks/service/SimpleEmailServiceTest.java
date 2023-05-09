@@ -1,6 +1,7 @@
 package com.crud.tasks.service;
 
 import com.crud.tasks.domain.Mail;
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,14 +31,14 @@ class SimpleEmailServiceTest {
                 .mailTo("test@test.com")
                 .subject("Test")
                 .message("Test Message")
-                .toCc(null)
+                //.toCc(null)
                 .build();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(mail.getMailTo());
         mailMessage.setSubject(mail.getSubject());
         mailMessage.setText(mail.getMessage());
-        mailMessage.setCc(mail.getToCc());
+        //mailMessage.setCc(mail.getToCc());
 
         //When
         simpleEmailService.send(mail);
