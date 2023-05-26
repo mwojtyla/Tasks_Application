@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -22,8 +23,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class DbServiceTests {
 
-    @Mock
+    @InjectMocks
     private DbService dbService;
+    @Mock
+    private TaskRepository taskRepository;
 
     @Test
     public void getAllTasksTest(){
@@ -40,7 +43,7 @@ public class DbServiceTests {
         assertNotNull(resultList);
     }
 
-    @Test
+   /* @Test
     public void findByIdTest() throws TaskNotFoundException {
         // Given
         Task task = new Task(1L,"Test", "Testing");
@@ -48,6 +51,19 @@ public class DbServiceTests {
         // When & Then
         assertDoesNotThrow(() -> dbService.getTask(task.getId()));
         assertDoesNotThrow(() -> dbService.getTask(null));
+    }*/
+
+    @Test
+    public void findByIdTest() throws TaskNotFoundException {
+        // Given
+        long taskId = 1l;
+        Optional<Task> task = Optional.ofNullable(new Task(1l,"Test", "Testing"));
+        when(taskRepository.findById(1l)).thenReturn(task);
+        // When
+        Task result = dbService.getTask(taskId);
+        // Then
+        assertEquals(taskId, result.getId());
+        assertDoesNotThrow(() -> dbService.getTask(taskId));
     }
 
     @Test

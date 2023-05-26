@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>console.sql</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+console.sql</font>
+</center></td></tr></table>
+<pre><span class="s0">ALTER TABLE </span><span class="s1">BOOKS </span><span class="s0">ADD </span><span class="s1">BESTSELLER </span><span class="s0">BOOLEAN;</span>
+
+<span class="s0">DROP FUNCTION IF EXISTS </span><span class="s1">Bestseller</span><span class="s0">;</span>
+
+<span class="s0">DELIMITER </span><span class="s1">$$</span>
+<span class="s0">CREATE FUNCTION </span><span class="s1">Bestseller(booksrented </span><span class="s0">INT</span><span class="s1">) </span><span class="s0">RETURNS BOOLEAN DETERMINISTIC</span>
+<span class="s0">BEGIN</span>
+    <span class="s0">DECLARE </span><span class="s1">result </span><span class="s0">BOOLEAN DEFAULT </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">IF </span><span class="s1">booksrented &gt; </span><span class="s2">2 </span><span class="s0">THEN</span>
+        <span class="s0">SET </span><span class="s1">result = </span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s0">END IF;</span>
+    <span class="s0">RETURN </span><span class="s1">result</span><span class="s0">;</span>
+<span class="s0">END </span><span class="s1">$$</span>
+<span class="s0">DELIMITER ;</span>
+
+
+<span class="s0">DROP PROCEDURE IF EXISTS </span><span class="s1">UpdateBestsellers</span><span class="s0">;</span>
+
+<span class="s0">DELIMITER </span><span class="s1">$$</span>
+<span class="s0">CREATE PROCEDURE </span><span class="s1">UpdateBestsellers()</span>
+<span class="s0">BEGIN</span>
+    <span class="s0">DECLARE </span><span class="s1">BOOKSRENTED</span><span class="s0">, </span><span class="s1">B_ID </span><span class="s0">INT;</span>
+    <span class="s0">DECLARE </span><span class="s1">FINISHED </span><span class="s0">INT DEFAULT </span><span class="s2">0</span><span class="s0">;</span>
+    <span class="s0">DECLARE </span><span class="s1">ALL_BOOKS </span><span class="s0">CURSOR FOR SELECT </span><span class="s1">BOOK_ID </span><span class="s0">FROM </span><span class="s1">BOOKS</span><span class="s0">;</span>
+    <span class="s0">DECLARE CONTINUE HANDLER FOR NOT FOUND SET </span><span class="s1">FINISHED = </span><span class="s2">1</span><span class="s0">;</span>
+    <span class="s0">OPEN </span><span class="s1">ALL_BOOKS</span><span class="s0">;</span>
+    <span class="s0">WHILE </span><span class="s1">(FINISHED = </span><span class="s2">0</span><span class="s1">) </span><span class="s0">DO</span>
+        <span class="s0">FETCH </span><span class="s1">ALL_BOOKS </span><span class="s0">INTO </span><span class="s1">B_ID</span><span class="s0">;</span>
+        <span class="s0">IF </span><span class="s1">(FINISHED = </span><span class="s2">0</span><span class="s1">) </span><span class="s0">THEN</span>
+            <span class="s0">SELECT COUNT</span><span class="s1">(*) </span><span class="s0">FROM </span><span class="s1">RENTS</span>
+            <span class="s0">WHERE </span><span class="s1">BOOK_ID = B_ID</span>
+            <span class="s0">INTO </span><span class="s1">BOOKSRENTED</span><span class="s0">;</span>
+
+            <span class="s0">UPDATE </span><span class="s1">BOOKS </span><span class="s0">SET </span><span class="s1">BESTSELLER = Bestseller(BOOKSRENTED)</span>
+            <span class="s0">WHERE </span><span class="s1">BOOK_ID = B_ID</span><span class="s0">;</span>
+            <span class="s0">COMMIT;</span>
+        <span class="s0">END IF;</span>
+    <span class="s0">END WHILE;</span>
+
+    <span class="s0">CLOSE </span><span class="s1">ALL_BOOKS</span><span class="s0">;</span>
+<span class="s0">END </span><span class="s1">$$</span>
+<span class="s0">DELIMITER ;</span>
+
+<span class="s0">CALL </span><span class="s1">UpdateBestsellers()</span><span class="s0">;</span>
+<span class="s0">SELECT </span><span class="s1">* </span><span class="s0">FROM </span><span class="s1">BOOKS</span><span class="s0">;</span></pre>
+</body>
+</html>
