@@ -43,7 +43,7 @@ public class DbServiceTests {
         assertNotNull(resultList);
     }
 
-   /* @Test
+ /*@Test
     public void findByIdTest() throws TaskNotFoundException {
         // Given
         Task task = new Task(1L,"Test", "Testing");
@@ -52,6 +52,7 @@ public class DbServiceTests {
         assertDoesNotThrow(() -> dbService.getTask(task.getId()));
         assertDoesNotThrow(() -> dbService.getTask(null));
     }*/
+
 
     @Test
     public void findByIdTest() throws TaskNotFoundException {
